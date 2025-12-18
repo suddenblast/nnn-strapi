@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "serieses",
+  "info": {
+    "singularName": "series",
+    "pluralName": "serieses",
+    "displayName": "Series"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "default": "Northwestern News Report",
+      "required": true,
+      "unique": true
+    },
+    "shows": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::show.show",
+      "mappedBy": "series"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    }
+  }
+}

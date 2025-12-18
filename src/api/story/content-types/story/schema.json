@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "stories",
+  "info": {
+    "singularName": "story",
+    "pluralName": "stories",
+    "displayName": "Story"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "headline": {
+      "type": "string",
+      "default": "Headline goes here",
+      "required": true
+    },
+    "dek": {
+      "type": "string"
+    },
+    "videoUrl": {
+      "type": "string"
+    },
+    "articleBody": {
+      "type": "blocks"
+    },
+    "airDate": {
+      "type": "date",
+      "required": true,
+      "default": "2025-12-18"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "show": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::show.show",
+      "inversedBy": "stories"
+    },
+    "staff": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::staff.staff",
+      "mappedBy": "stories"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "headline",
+      "required": true
+    }
+  }
+}
