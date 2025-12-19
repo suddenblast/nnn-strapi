@@ -1,61 +1,243 @@
-# 🚀 Getting started with Strapi
+# Northwestern News Network – Strapi CMS
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+This repository contains the **Strapi headless CMS** for the Northwestern News Network (NNN). It serves as the central content management system powering the Astro frontend.
 
-### `develop`
+Editors, reporters, and producers use this CMS to manage:
+- Stories and breaking news
+- Staff profiles and roles
+- Shows and programs
+- Images, thumbnails, and video links
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
-
-```
-npm run develop
-# or
-yarn develop
-```
-
-### `start`
-
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
-```
-
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
-npm run build
-# or
-yarn build
-```
-
-## ⚙️ Deployment
-
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
-```
-yarn strapi deploy
-```
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+The CMS exposes a REST API that the Astro site consumes to render a fast, modern newsroom website.
 
 ---
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## Tech Stack
+
+- **Strapi v4** – Headless CMS
+- **Node.js** – Runtime
+- **SQLite / PostgreSQL** – Database (environment-dependent)
+- **REST API** – Content delivery
+
+---
+
+## Requirements
+
+Before running this project, you need:
+
+- **Node.js** 18+
+- **npm** or **yarn**
+- Database:
+  - Local dev: SQLite (default)
+  - Production: PostgreSQL (recommended)
+
+---
+
+## Installation
+
+Clone the repo and install dependencies:
+
+```
+npm install
+```
+
+---
+
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```
+HOST=0.0.0.0
+PORT=1337
+APP_KEYS=key1,key2,key3,key4
+API_TOKEN_SALT=your_api_token_salt
+ADMIN_JWT_SECRET=your_admin_jwt_secret
+JWT_SECRET=your_jwt_secret
+```
+
+> **Important:** `APP_KEYS` is required for Strapi sessions. If missing, the server will fail to start.
+
+---
+
+## Running Strapi
+
+### Development
+
+```
+npm run develop
+```
+
+Starts Strapi with hot reloading at:
+
+```
+http://localhost:1337
+```
+
+### Production
+
+```
+npm run build
+npm run start
+```
+
+---
+
+## Admin Panel
+
+The admin UI is available at:
+
+```
+http://localhost:1337/admin
+```
+
+Create an admin user on first launch.
+
+---
+
+## Content Types
+
+### Story
+
+Primary content type used by the Astro frontend.
+
+Typical fields:
+- `headline` (text)
+- `dek` (text)
+- `slug` (UID)
+- `articleBody` (rich text / blocks)
+- `publishedAt` (date)
+- `featured` (boolean)
+- `videoUrl` (text, optional)
+- `thumbnail` / `coverImage` (media)
+- Relations:
+  - `staff`
+  - `show`
+
+---
+
+### Staff
+
+Represents reporters, anchors, producers, and contributors.
+
+Typical fields:
+- `name`
+- `role` (e.g. Reporter, Anchor)
+- `headshot` (media)
+- `bio`
+
+Used to generate bylines such as:
+
+```
+By Jonas Blum • Reporter
+```
+
+---
+
+### Show
+
+Used for NNN programs and recurring content.
+
+Typical fields:
+- `title`
+- `slug`
+- `description`
+- `logo`
+
+---
+
+## API Usage
+
+The CMS exposes REST endpoints consumed by the Astro site.
+
+Common patterns:
+
+- Fetch latest stories:
+  - `GET /api/stories?sort=publishedAt:desc`
+- Fetch story by slug:
+  - `GET /api/stories?filters[slug][$eq]=example-slug`
+- Populate relations:
+  - `populate=staff,thumbnail,show`
+
+All content **must be published** to be available via the API.
+
+---
+
+## Roles & Permissions
+
+Strapi permissions control what the public API can access.
+
+Make sure the **Public** role has read access to:
+- Stories
+- Staff
+- Shows
+
+Fields must also be enabled individually.
+
+---
+
+## Media Handling
+
+- Media is uploaded via the Strapi admin
+- Images are served through Strapi’s media API
+- Thumbnails and cover images are consumed by the Astro frontend
+
+For production, configure cloud storage (S3, Cloudinary, etc.) if needed.
+
+---
+
+## Common Issues
+
+### Server fails to start
+
+Error:
+
+```
+Middleware "strapi::session": App keys are required
+```
+
+Fix:
+- Ensure `APP_KEYS` is set in `.env`
+
+---
+
+### 400 errors from API
+
+- Check that `populate` fields match exact content-type names
+- Ensure relations exist on the entry
+- Confirm the entry is published
+
+---
+
+### Content not appearing on frontend
+
+- Entry is not published
+- Public permissions are not enabled
+- Incorrect API URL in Astro frontend
+
+---
+
+## Deployment Notes
+
+- Strapi can be deployed on **Render**, **Railway**, **Heroku**, or **DigitalOcean**
+- Use **PostgreSQL** for production
+- Set all environment variables in the hosting provider
+- Do not commit `.env` to version control
+
+---
+
+## Development Workflow
+
+1. Run Strapi locally
+2. Create or edit content in admin panel
+3. Publish entries
+4. View changes immediately in Astro frontend
+
+---
+
+## Maintainers
+
+Northwestern News Network
+
+Maintained by the NNN digital and newsroom teams.
+
