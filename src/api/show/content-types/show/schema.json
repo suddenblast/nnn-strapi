@@ -54,6 +54,10 @@
       "relation": "manyToOne",
       "target": "api::series.series",
       "inversedBy": "shows"
+    },
+    "airDate": {
+      "type": "date",
+      "required": true
     }
   }
 }

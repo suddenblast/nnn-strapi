@@ -430,6 +430,41 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiSectionSection extends Struct.CollectionTypeSchema {
+  collectionName: 'sections';
+  info: {
+    displayName: 'Section';
+    pluralName: 'sections';
+    singularName: 'section';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    color: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::section.section'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.DefaultTo<'section name'>;
+    order: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    stories: Schema.Attribute.Relation<'oneToMany', 'api::story.story'>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiSeriesSeries extends Struct.CollectionTypeSchema {
   collectionName: 'serieses';
   info: {
@@ -474,6 +509,7 @@ export interface ApiShowShow extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    airDate: Schema.Attribute.Date & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -556,6 +592,7 @@ export interface ApiStoryStory extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::story.story'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    section: Schema.Attribute.Relation<'manyToOne', 'api::section.section'>;
     show: Schema.Attribute.Relation<'manyToOne', 'api::show.show'>;
     slug: Schema.Attribute.UID<'headline'> & Schema.Attribute.Required;
     staff: Schema.Attribute.Relation<'manyToMany', 'api::staff.staff'>;
@@ -1077,6 +1114,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::section.section': ApiSectionSection;
       'api::series.series': ApiSeriesSeries;
       'api::show.show': ApiShowShow;
       'api::staff.staff': ApiStaffStaff;
