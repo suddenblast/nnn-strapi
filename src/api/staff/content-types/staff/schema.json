@@ -43,6 +43,11 @@
       "relation": "manyToMany",
       "target": "api::show.show",
       "mappedBy": "ep"
+    },
+    "active": {
+      "type": "boolean",
+      "required": true,
+      "default": true
     }
   }
 }
