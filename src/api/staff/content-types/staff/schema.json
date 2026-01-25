@@ -48,6 +48,11 @@
       "type": "boolean",
       "required": true,
       "default": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
     }
   }
 }

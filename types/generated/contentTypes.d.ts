@@ -457,7 +457,7 @@ export interface ApiSectionSection extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'section name'>;
     order: Schema.Attribute.Integer;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    slug: Schema.Attribute.UID<''> & Schema.Attribute.Required;
     stories: Schema.Attribute.Relation<'oneToMany', 'api::story.story'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -491,7 +491,7 @@ export interface ApiSeriesSeries extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'Northwestern News Report'>;
     publishedAt: Schema.Attribute.DateTime;
     shows: Schema.Attribute.Relation<'oneToMany', 'api::show.show'>;
-    slug: Schema.Attribute.UID<'name'>;
+    slug: Schema.Attribute.UID<''>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -525,8 +525,8 @@ export interface ApiShowShow extends Struct.CollectionTypeSchema {
       Schema.Attribute.DefaultTo<'Northwestern News Report'>;
     publishedAt: Schema.Attribute.DateTime;
     series: Schema.Attribute.Relation<'manyToOne', 'api::series.series'>;
-    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
-    stories: Schema.Attribute.Relation<'oneToMany', 'api::story.story'>;
+    slug: Schema.Attribute.UID<''> & Schema.Attribute.Required;
+    stories: Schema.Attribute.Relation<'manyToMany', 'api::story.story'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -561,6 +561,7 @@ export interface ApiStaffStaff extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     role: Schema.Attribute.String;
     shows: Schema.Attribute.Relation<'manyToMany', 'api::show.show'>;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     stories: Schema.Attribute.Relation<'manyToMany', 'api::story.story'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -579,9 +580,7 @@ export interface ApiStoryStory extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    airDate: Schema.Attribute.Date &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'2025-12-18'>;
+    airDate: Schema.Attribute.Date & Schema.Attribute.Required;
     articleBody: Schema.Attribute.Blocks;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -596,7 +595,7 @@ export interface ApiStoryStory extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     section: Schema.Attribute.Relation<'manyToOne', 'api::section.section'>;
-    show: Schema.Attribute.Relation<'manyToOne', 'api::show.show'>;
+    shows: Schema.Attribute.Relation<'manyToMany', 'api::show.show'>;
     slug: Schema.Attribute.UID<'headline'> & Schema.Attribute.Required;
     staff: Schema.Attribute.Relation<'manyToMany', 'api::staff.staff'>;
     thumbnail: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;

@@ -19,7 +19,7 @@
     },
     "slug": {
       "type": "uid",
-      "targetField": "name",
+      "targetField": "",
       "required": true
     },
     "color": {

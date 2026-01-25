@@ -27,8 +27,7 @@
     },
     "airDate": {
       "type": "date",
-      "required": true,
-      "default": "2025-12-18"
+      "required": true
     },
     "featured": {
       "type": "boolean",
@@ -44,9 +43,9 @@
         "audios"
       ]
     },
-    "show": {
+    "shows": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::show.show",
       "inversedBy": "stories"
     },

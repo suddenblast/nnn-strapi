@@ -18,7 +18,7 @@
     },
     "slug": {
       "type": "uid",
-      "targetField": "name",
+      "targetField": "",
       "required": true
     },
     "description": {
@@ -39,9 +39,9 @@
     },
     "stories": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "api::story.story",
-      "mappedBy": "show"
+      "mappedBy": "shows"
     },
     "ep": {
       "type": "relation",
